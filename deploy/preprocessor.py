@@ -1,5 +1,7 @@
 from sklearn.base import TransformerMixin, BaseEstimator
 
+import config
+
 
 class DoNothing(TransformerMixin, BaseEstimator):
     def __init__(self, variables=None):
@@ -15,3 +17,21 @@ class DoNothing(TransformerMixin, BaseEstimator):
     def transform(self, X):
         X = X.copy()
         return X
+
+
+from sklearn.pipeline import Pipeline
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+from sklearn.compose import ColumnTransformer
+
+pca = PCA()
+standard = StandardScaler()
+
+numeric_transformer = Pipeline([
+    ('pca', pca),
+    ('standard_scailer', standard)
+])
+
+preprocess = ColumnTransformer([
+    ('num', numeric_transformer, config.NUMERIC_COL),
+])
